@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  # 1. 資料庫 (PostgreSQL)
+  postgresql:
+    image: postgres:17-alpine
+    container_name: waterball-db
+    restart: always
+    environment:
+      POSTGRES_DB: waterball_db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  # 2. 物件儲存 (MinIO - S3 Mock)
+  storage:
+    image: minio/minio:latest
+    container_name: waterball-storage
+    restart: always
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    ports:
+      - "9000:9000"  # API Port
+      - "9001:9001"  # Console UI Port
+    volumes:
+      - minio-data:/data
+
+volumes:
+  db-data:
+  minio-data:
