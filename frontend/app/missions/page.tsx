@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Sword, Clock, Calendar, Lock, CheckCircle, AlertCircle, ArrowRight } from "lucide-react";
 import { clsx } from "clsx";
 
@@ -17,61 +17,30 @@ interface Mission {
     type: "WHITE" | "BLACK" | "NEWBIE"; // 任務類型
 }
 
-// --- 2. Mock Data (模擬後端資料) ---
-const MOCK_MISSIONS: Mission[] = [
-    {
-        id: "m_new_1",
-        title: "新手任務一",
-        condition: "無",
-        timeLimit: "無限制",
-        reward: "經驗值 300",
-        status: "COMPLETED", // 假設已完成
-        type: "NEWBIE",
-    },
-    {
-        id: "m_new_2",
-        title: "新手任務二",
-        condition: "完成新手任務一",
-        timeLimit: "無限制",
-        reward: "延長期限 30 天",
-        status: "CLAIMABLE", // 可領獎
-        type: "NEWBIE",
-    },
-    {
-        id: "m_w_2",
-        title: "白段任務二",
-        condition: "通過道館 3",
-        timeLimit: "30 天",
-        reward: "延長期限 30 天",
-        status: "AVAILABLE", // 可接取
-        type: "WHITE",
-    },
-    {
-        id: "m_w_3",
-        title: "白段任務三",
-        condition: "通過道館 4",
-        timeLimit: "30 天",
-        reward: "延長期限 90 天",
-        status: "LOCKED", // 鎖定中
-        type: "WHITE",
-    },
-    {
-        id: "m_b_1",
-        title: "黑段任務一",
-        condition: "完成白段任務三",
-        timeLimit: "30 天",
-        reward: "延長期限 30 天",
-        status: "LOCKED",
-        type: "BLACK",
-    },
-];
-
 export default function MissionsPage() {
     // Tab 狀態: available (可接) | ongoing (進行中) | past (過去)
     const [activeTab, setActiveTab] = useState<"available" | "ongoing" | "past">("available");
+    const [missions, setMissions] = useState<Mission[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+
+    useEffect(() => {
+        async function fetchMissions() {
+            try {
+                const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}api/missions`);
+                if (!res.ok) throw new Error("Failed to fetch missions");
+                const data = await res.json();
+                setMissions(data);
+            } catch (error) {
+                console.error("Error loading missions:", error);
+            } finally {
+                setLoading(false);
+            }
+        }
+        fetchMissions();
+    }, []);
 
     // 根據 Tab 篩選顯示的任務
-    const displayedMissions = MOCK_MISSIONS.filter((m) => {
+    const displayedMissions = missions.filter((m) => {
         if (activeTab === "available") {
             // "可接任務" 顯示：可接取、鎖定中、可領獎
             return ["AVAILABLE", "LOCKED", "CLAIMABLE"].includes(m.status);
