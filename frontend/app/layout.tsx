@@ -4,6 +4,7 @@ import "./globals.css";
 import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { CourseProvider } from "@/contexts/CourseContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,6 +21,7 @@ export default function RootLayout({
   return (
     <html lang="zh-TW">
       <body className={`${inter.className} bg-wb-dark text-wb-text`}>
+        <CourseProvider>
         <div className="flex min-h-screen">
           {/* 左側固定 Sidebar */}
           <Sidebar />
@@ -39,6 +41,7 @@ export default function RootLayout({
             <Footer />
           </div>
         </div>
+        </CourseProvider>
       </body>
     </html>
   );

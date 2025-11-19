@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import { Bell, ChevronDown, LogOut, User, Moon, Users, BookOpen } from "lucide-react";
 import { clsx } from "clsx";
 import Link from "next/link";
+import { useCourse } from "@/contexts/CourseContext";
 
 export default function Header() {
     // 控制三個選單的開關狀態
@@ -11,10 +12,19 @@ export default function Header() {
     const [isNotifOpen, setIsNotifOpen] = useState(false);
     const [isUserOpen, setIsUserOpen] = useState(false);
 
+    // 從 Context 取得課程資料
+    const { courses, selectedCourseId, setSelectedCourseId, loading } = useCourse();
+    const selectedCourse = courses.find(c => c.id === selectedCourseId);
+
     // 點擊外部關閉選單的邏輯
     const toggleCourse = () => { setIsCourseOpen(!isCourseOpen); setIsNotifOpen(false); setIsUserOpen(false); };
     const toggleNotif = () => { setIsNotifOpen(!isNotifOpen); setIsCourseOpen(false); setIsUserOpen(false); };
     const toggleUser = () => { setIsUserOpen(!isUserOpen); setIsCourseOpen(false); setIsNotifOpen(false); };
+
+    const handleCourseSelect = (courseId: string) => {
+        setSelectedCourseId(courseId);
+        setIsCourseOpen(false);
+    };
 
     return (
         // 修改背景色以符合截圖
@@ -25,19 +35,31 @@ export default function Header() {
                     onClick={toggleCourse}
                     className="flex items-center gap-3 px-4 py-2 bg-[#202026] border border-gray-700 rounded text-gray-200 hover:border-wb-yellow transition text-sm min-w-[240px] justify-between"
                 >
-                    <span className="font-medium">軟體設計模式精通之旅</span>
+                    <span className="font-medium">
+                        {loading ? "載入中..." : (selectedCourse?.title || "選擇課程")}
+                    </span>
                     <ChevronDown size={16} className={clsx("text-gray-400 transition", isCourseOpen && "rotate-180")} />
                 </button>
 
                 {/* Dropdown Content */}
                 {isCourseOpen && (
                     <div className="absolute top-full left-0 mt-2 w-full bg-[#202026] border border-gray-700 rounded shadow-xl py-1 animate-fade-in">
-                        <div className="px-4 py-2 hover:bg-gray-700 cursor-pointer text-sm text-gray-200 flex items-center gap-2">
-                            <span className="text-wb-yellow">✓</span> 軟體設計模式精通之旅
-                        </div>
-                        <div className="px-4 py-2 hover:bg-gray-700 cursor-pointer text-sm text-gray-400 pl-9">
-                            AI x BDD 全自動開發術
-                        </div>
+                        {courses.map((course) => (
+                            <div
+                                key={course.id}
+                                onClick={() => handleCourseSelect(course.id)}
+                                className={clsx(
+                                    "px-4 py-2 hover:bg-gray-700 cursor-pointer text-sm flex items-center gap-2",
+                                    course.id === selectedCourseId ? "text-gray-200" : "text-gray-400 pl-9"
+                                )}
+                            >
+                                {course.id === selectedCourseId && <span className="text-wb-yellow">✓</span>}
+                                {course.title}
+                            </div>
+                        ))}
+                        {courses.length === 0 && !loading && (
+                            <div className="px-4 py-2 text-sm text-gray-500">暫無課程</div>
+                        )}
                     </div>
                 )}
             </div>

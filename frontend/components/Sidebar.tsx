@@ -13,7 +13,7 @@ const MENU_ITEMS = [
     { name: "排行榜", href: "/ranking", icon: Trophy },
     { name: "獎勵任務", href: "/missions", icon: Sword },
     { name: "挑戰歷程", href: "/history", icon: FileText, withDivider: true },
-    { name: "所有單元", href: "/units", icon: BookOpen },
+    { name: "所有單元", href: "/lessons", icon: BookOpen },
     { name: "挑戰地圖", href: "/map", icon: Map },
     { name: "SOP 寶典", href: "/sop", icon: BookOpen },
 ];
@@ -86,11 +86,6 @@ export default function Sidebar() {
                     );
                 })}
             </nav>
-
-            {/* 底部留白或是版本號 */}
-            <div className="p-4 text-center text-xs text-gray-600 mt-auto">
-                v1.0.0 Release 1
-            </div>
         </aside>
     );
 }
