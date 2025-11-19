@@ -21,7 +21,6 @@ public class CreateLessonHandler implements CommandHandler<CreateLessonCommand, 
         var lesson = new Lesson(command.courseId(), command.title(), command.isChallenge());
         lesson.setDescription(command.description());
         lesson.setVideoUrl(command.videoUrl());
-        lesson.setDurationDays(command.durationSeconds());
         lesson.setArticleContent(command.articleContent());
         lesson.setPrerequisites(command.prerequisites());
         lesson.setPrerequisiteLessonId(command.prerequisiteLessonId());

@@ -9,7 +9,6 @@ public record CreateLessonCommand(
         String description,
         boolean isChallenge,
         String videoUrl,
-        Integer durationSeconds,
         String articleContent,
         String prerequisites,
         UUID prerequisiteLessonId,
