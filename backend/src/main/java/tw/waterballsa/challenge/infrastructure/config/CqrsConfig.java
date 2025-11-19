@@ -3,6 +3,7 @@ package tw.waterballsa.challenge.infrastructure.config;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.ClassUtils;
 import jakarta.annotation.PostConstruct;
 import tw.waterballsa.challenge.infrastructure.cqrs.*;
 
@@ -61,7 +62,9 @@ public class CqrsConfig {
     }
 
     private Class<?> getGenericClass(Class<?> handlerClass, Class<?> interfaceClass) {
-        for (Type type : handlerClass.getGenericInterfaces()) {
+        Class<?> userClass = ClassUtils.getUserClass(handlerClass);
+
+        for (Type type : userClass.getGenericInterfaces()) {
             if (type instanceof ParameterizedType paramType) {
                 if (paramType.getRawType().equals(interfaceClass)) {
                     return (Class<?>) paramType.getActualTypeArguments()[0];

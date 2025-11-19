@@ -12,6 +12,8 @@ import java.util.UUID;
 @Repository
 public interface SubmissionRepository extends JpaRepository<Submission, UUID> {
 
+    List<Submission> findByLessonId(UUID lessonId);
+
     List<Submission> findByStudentIdAndLessonId(UUID studentId, UUID lessonId);
 
     Optional<Submission> findByStudentIdAndLessonIdAndSubmissionType(

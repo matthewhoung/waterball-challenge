@@ -26,7 +26,6 @@ public class Lesson extends BaseEntity {
 
     // Content
     private String videoUrl;
-    private Integer durationSeconds;
 
     @Column(length = 10000)
     private String articleContent;
@@ -101,14 +100,6 @@ public class Lesson extends BaseEntity {
 
     public void setVideoUrl(String videoUrl) {
         this.videoUrl = videoUrl;
-    }
-
-    public Integer getDurationSeconds() {
-        return durationSeconds;
-    }
-
-    public void setDurationSeconds(Integer durationSeconds) {
-        this.durationSeconds = durationSeconds;
     }
 
     public String getArticleContent() {
