@@ -3,9 +3,9 @@ spring:
     name: waterball-challenge
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/waterball_db
-    username: user
-    password: password
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/waterball_db}
+    username: ${SPRING_DATASOURCE_USERNAME:user}
+    password: ${SPRING_DATASOURCE_PASSWORD:password}
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -20,7 +20,7 @@ spring:
 
 # MinIO Configuration
 minio:
-  endpoint: http://localhost:9000
+  endpoint: ${MINIO_ENDPOINT:http://localhost:9000}
   access-key: minioadmin
   secret-key: minioadmin
   bucket-name: course-videos
