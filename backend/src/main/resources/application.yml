@@ -18,6 +18,17 @@ spring:
         format_sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
 
+# ADMIN Configuration
+admin:
+  email: ${ADMIN_EMAIL:admin@waterballsa.tw}
+  password: ${ADMIN_PASSWORD:password}
+
+# JWT Configuration
+jwt:
+  secret: ${JWT_SECRET:cuS41N3m8gOnwmRL2YF5CS3p7ver5n2Z}
+  expiration: ${JWT_EXPIRATION:86400000}
+  refresh-token-expiration: ${JWT_REFRESH_TOKEN_EXPIRATION:604800000}
+
 # MinIO Configuration
 minio:
   endpoint: ${MINIO_ENDPOINT:http://localhost:9000}
@@ -25,6 +36,19 @@ minio:
   secret-key: minioadmin
   bucket-name: course-videos
 
-# Server Port
+# Server Configuration
 server:
-  port: 5000
+  port: ${SERVER_PORT:5000}
+  error:
+    include-message: always
+    include-binding-errors: always
+
+# CORS Configuration
+cors:
+  allowed-origins: ${ALLOWED_ORIGINS:http://localhost:3000}
+
+# Logging
+logging:
+  level:
+    tw.waterballsa.challenge: ${LOG_LEVEL:DEBUG}
+    org.springframework.security: ${LOG_LEVEL_SECURITY:DEBUG}
