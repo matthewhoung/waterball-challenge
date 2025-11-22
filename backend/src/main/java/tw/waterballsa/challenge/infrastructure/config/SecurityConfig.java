@@ -43,13 +43,20 @@ public class SecurityConfig {
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
+                        // Public endpoints
                         .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/journeys/**").permitAll()
                         .requestMatchers("/api/courses/**").permitAll()
-                        .requestMatchers("/api/challenges/**").permitAll()
+
+                        // Authenticated endpoints
                         .requestMatchers("/api/lessons/**").authenticated()
                         .requestMatchers("/api/videos/**").authenticated()
                         .requestMatchers("/api/enrollments/**").authenticated()
+
+                        // Admin only
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
+
+                        // Fallback
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

@@ -1,13 +1,11 @@
 spring:
   application:
     name: waterball-challenge
-
   datasource:
     url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/waterball_db}
     username: ${SPRING_DATASOURCE_USERNAME:user}
     password: ${SPRING_DATASOURCE_PASSWORD:password}
     driver-class-name: org.postgresql.Driver
-
   jpa:
     open-in-view: false
     hibernate:
@@ -17,6 +15,11 @@ spring:
       hibernate:
         format_sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 500MB
+      max-request-size: 500MB
 
 # ADMIN Configuration
 admin:
@@ -34,7 +37,10 @@ minio:
   endpoint: ${MINIO_ENDPOINT:http://localhost:9000}
   access-key: minioadmin
   secret-key: minioadmin
-  bucket-name: course-videos
+  bucket-name: waterball-course-videos
+  max-file-size: 524288000 # 500MB in bytes
+  allowed-video-types: video/mp4,video/webm,video/ogg
+  allowed-image-types: image/jpeg,image/png,image/webp
 
 # Server Configuration
 server:
